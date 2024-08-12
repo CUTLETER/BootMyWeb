@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{./include/baseLayout :: setContent( ~{ ::.wrap } ) }">
+    <div class="wrap">
+        <div class="warp_inner">
+            <!-- left_menu end -->
+            <div class="right_content">
+                <div class="midiaq">
+                    <div class="mainWrapper">
+                        <div class="ipssGiudeBlock" style="color:red; font-size: large;">
+                            -요구사항<br>
+                            -글에 대한 내용을 화면에 출력한다.<br>
+                            -해당 글에 해당하는 정보를 미리 보여주도록 처리한다. <br>
+                            <br>
+
+                        </div>
+                    </div>
+                    <div class="page_title">게시글 연습 ><span class="page_subtitle">글 상세보기</span></div>
+                    <form name="#####" action="#####" method="post">
+                        <div class="full_collum collum">
+                            <ul>
+                                <li class="collum_tit">
+                                    <h2>게시글관리</h2>
+
+                                    <span class="showtoggle minus"></span>
+                                    <ul>
+                                        <li>
+                                            <table cellpadding="0" cellspacing="0" class="board_basic_view"
+                                                   width="100%;">
+                                                <tr>
+                                                    <th>등록일</th>
+                                                    <td>
+                                                        <span>2016-01-01</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>아이디</th>
+                                                    <td>admin</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>제목</th>
+                                                    <td colspan="5">오늘은 해가뜨려나?</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>내용</th>
+                                                    <td colspan="5">
+                                                        <div style="min-height: 300px;">오늘은 비가오려나?
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+
+                                            </table>
+                                            <div class="btn_area">
+                                                <input type="button" class="save" value="등록하러가기">
+                                                <input type="button" class="delete" value="전체목록으로">
+
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- right_content end -->
+        </div>
+        <div class="dim_layer">
+        </div>
+    </div>
+</th:block>
+
+</html>

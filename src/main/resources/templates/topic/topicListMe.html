@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{./include/baseLayout :: setContent( ~{ ::.wrap } ) }">
+	<div class="wrap">
+		<div class="warp_inner">
+
+			<!-- left_menu end -->
+			<div class="right_content">
+
+				<div class="midiaq">
+					<div class="mainWrapper">
+						<div class="ipssGiudeBlock" style="color:red; font-size: large;">
+							-요구사항<br>
+							-내가 작성한 글만 볼 수 있습니다. (where id = 'admin')<br>
+							-수정/삭제 클릭시 수정/삭제 화면으로 넘어갑니다<br>
+						</div>
+					</div>
+
+					<form name="###########" action="############" method="get" >
+
+						<div class="full_collum collum">
+							<ul>
+								<li class="collum_tit">
+									<h2>내글 목록</h2>
+
+									<select class="">
+										<option value="10">10개 보기</option>
+										<option value="20">20개 보기</option>
+										<option value="40">40개 보기</option>
+										<option value="80">80개 보기</option>
+									</select>
+									<span class="showtoggle minus"></span>
+									<ul>
+										<li>
+											<table cellpadding="0" cellspacing="0" class="row_tb_7" width="100%;">
+												<tr>
+													<th>순서</th>
+													<th>아이디</th>
+													<th>제목</th>
+													<th>내용</th>
+													<th>등록일</th>
+													<th>수정/삭제</th>
+												</tr>
+
+												<tr>
+													<td>1</td>
+													<td>admin</td>
+													<td>오늘은 해가뜨려나?</td>
+													<td>
+														오늘은 비가오려나?
+													</td>
+													<td>2016-01-01</td>
+													<td>
+														<a href="#">수정</a>
+														/
+														<a href="#">삭제</a>
+													</td>
+												</tr>
+
+												<tr>
+													<td>1</td>
+													<td>admin</td>
+													<td>세상에서 가장 가난한 임금은?</td>
+													<td>
+														최저임금
+													</td>
+													<td>2016-01-01</td>
+													<td>
+														<a href="#">수정</a>
+														/
+														<a href="#">삭제</a>
+													</td>
+												</tr>
+
+											</table>
+
+
+											<div class="page">
+												<ul>
+													<li><a href="#"><i class="fa fa-angle-double-left"
+																	   aria-hidden="true"></i></a></li>
+													<li style="margin-right:5px;"><a href="#"><i class="fa fa-angle-left"
+																								 aria-hidden="true"></i></a></li>
+													<li class="on"><a href="#">1</a></li>
+													<li><a href="#">2</a></li>
+													<li><a href="#">3</a></li>
+													<li><a href="#">4</a></li>
+													<li><a href="#">5</a></li>
+													<li style="margin-left:5px;"><a href="#"><i class="fa fa-angle-right"
+																								aria-hidden="true"></i></a></li>
+													<li><a href="#"><i class="fa fa-angle-double-right"
+																	   aria-hidden="true"></i></a></li>
+												</ul>
+											</div>
+										</li>
+
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+
+		<!-- 모달창 -->
+		<div id="basicModal" class="modal-overlay">
+			<div class="modal-content">
+				<div class="modalOff">X</div>
+				<p class="title">이미지수정</p>
+
+				<div class="content">
+					<div class="sub-form">
+						<!--미리보기 폼-->
+						<div class="filebox preview-image">
+							<!--1 -->
+							<div class="left">
+								<span>추가이미지</span>
+								<label class="upload-display" for="a_file">
+											<span class="upload-thumb-wrap">
+													<img class="upload-thumb" src="../img/item_main.jpg">
+											</span>
+								</label>
+								<input class="upload-name" value="파일선택" disabled="disabled">
+								<input type="file" name="file" id="a_file" class="upload-hidden">
+								<input type="hidden" value="">
+								<input type="hidden" value="">
+								<button type="button" class="normal_btn" style="display: block;">삭제</button>
+
+							</div>
+							<div class="left">
+								<span>추가이미지</span>
+								<label class="upload-display" for="b_file">
+											<span class="upload-thumb-wrap">
+													<img class="upload-thumb" src="../img/plus_btn.png">
+											</span>
+								</label>
+								<input class="upload-name" value="파일선택" disabled="disabled">
+								<input type="file" name="file" id="b_file" class="upload-hidden">
+								<input type="hidden" value="">
+								<input type="hidden" value="">
+								<button type="button" class="normal_btn" style="display: block;">삭제</button>
+							</div>
+							<div class="left">
+								<span>추가이미지</span>
+								<label class="upload-display" for="c_file">
+											<span class="upload-thumb-wrap">
+													<img class="upload-thumb" src="../img/plus_btn.png">
+											</span>
+								</label>
+								<input class="upload-name" value="파일선택" disabled="disabled">
+								<input type="file" name="file" id="c_file" class="upload-hidden">
+								<input type="hidden" value="">
+								<input type="hidden" value="">
+								<button type="button" class="normal_btn" style="display: block;">삭제</button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+
+				<div class="btn_area">
+					<a href="수정!!" class="save" >수정</a>
+				</div>
+
+			</div>
+		</div>
+	</div><!-- end wrap -->
+</th:block>
+
+</html>

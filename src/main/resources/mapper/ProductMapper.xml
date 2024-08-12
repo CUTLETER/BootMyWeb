@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coding404.myweb.product.ProductMapper">
+
+    <insert id="productInsert" parameterType="ProductVO">
+        INSERT INTO PRODUCT(PROD_ENDDATE
+                            ,PROD_WRITER
+                            ,PROD_NAME
+                            ,PROD_PRICE
+                            ,PROD_COUNT
+                            ,PROD_DISCOUNT
+                            ,PROD_PURCHASE_YN
+                            ,PROD_CONTENT
+                            ,PROD_COMMENT
+                            )
+        VALUES (
+            #{prodEnddate}
+            ,#{prodWriter}
+            ,#{prodName}
+            ,#{prodPrice}
+            ,#{prodCount}
+            ,#{prodDiscount}
+            ,#{prodPurchaseYn}
+            ,#{prodContent}
+            ,#{prodComment}
+        )
+    </insert>
+
+    <!-- 목록을 조회한다 -->
+    <!-- 동적 쿼리 test 구문에는 vo의 getter나 map의 key값이 사용 가능함-->
+    <select id="getList" resultType="ProductVO">
+        SELECT *
+        FROM PRODUCT
+        WHERE PROD_WRITER = #{userId}
+        /*input 태그는 값이 없으면 공백, 페이지 첫 진입할 때 null로 넘어갈 수 있어서*/
+        <if test="cri.searchName != '' and cri.searchName != null">
+            AND PROD_NAME LIKE CONCAT('%',#{cri.searchName},'%')
+        </if>
+        <if test="cri.searchContent != '' and cri.searchContent != null">
+            AND PROD_CONTENT LIKE CONCAT('%',#{cri.searchContent},'%')
+        </if>
+        <if test="cri.startDate != '' and cri.startDate != null">
+            <![CDATA[AND PROD_ENDDATE >= #{cri.startDate}]]>
+        </if>
+        <if test="cri.endDate != '' and cri.endDate != null">
+          /*
+            xml 이나 html 한해서는 꺽쇠가 태그를 열고 닫는 인자로 인식됨
+            그래서 순수 문자열로 변환시켜줘야 하는데 그럴 때 쓰는 게 CDATA
+            <![CDATA[여기 들어간 값은 순수한 문자열로 인식됨]]>
+          */
+            <![CDATA[AND PROD_ENDDATE <= #{cri.endDate}]]>
+        </if>
+        ORDER BY
+        <if test="cri.searchPrice == 'asc'">
+            PROD_PRICE ASC,
+        </if>
+        <if test="cri.searchPrice == 'desc'">
+            PROD_PRICE DESC,
+        </if>
+        PROD_ID DESC
+        LIMIT #{ cri.pageStart}, #{ cri.amount}
+    </select>
+
+    <select id="getTotal" resultType="int">
+        SELECT COUNT(*) AS TOTAL
+        FROM PRODUCT
+        WHERE PROD_WRITER = #{userId}
+        <if test="cri.searchName != '' and cri.searchName != null">
+            AND PROD_NAME LIKE CONCAT('%',#{cri.searchName},'%')
+        </if>
+        <if test="cri.searchContent != '' and cri.searchContent != null">
+            AND PROD_CONTENT LIKE CONCAT('%',#{cri.searchContent},'%')
+        </if>
+        <if test="cri.startDate != '' and cri.startDate != null">
+            <![CDATA[AND PROD_ENDDATE >= #{cri.startDate}]]>
+        </if>
+        <if test="cri.endDate != '' and cri.endDate != null">
+            <![CDATA[AND PROD_ENDDATE <= #{cri.endDate}]]>
+        </if>
+    </select>
+
+    <!--상세내역을 조회한다-->
+    <select id="getDetail" resultType="ProductVO">
+        SELECT *
+        FROM PRODUCT
+        WHERE PROD_ID = #{prodId}
+    </select>
+
+
+    <update id="productUpdate" parameterType="ProductVO">
+        UPDATE PRODUCT
+        SET
+            PROD_ENDDATE = #{prodEnddate}
+            ,PROD_NAME = #{prodName}
+            ,PROD_PRICE = #{prodPrice}
+            ,PROD_COUNT = #{prodCount}
+            ,PROD_DISCOUNT = #{prodDiscount}
+            ,PROD_PURCHASE_YN = #{prodPurchaseYn}
+            ,PROD_CONTENT = #{prodContent}
+            ,PROD_COMMENT = #{prodComment}
+        WHERE PROD_ID = #{prodId}
+    </update>
+
+    <!--삭제 기능 -->
+    <delete id="productDelete" parameterType="int">
+        DELETE FROM PRODUCT WHERE PROD_ID = #{prodId}
+    </delete>
+
+
+</mapper>
