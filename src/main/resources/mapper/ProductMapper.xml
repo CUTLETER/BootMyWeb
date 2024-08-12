@@ -7,7 +7,7 @@
 
     <insert id="productInsert" parameterType="ProductVO">
         INSERT INTO PRODUCT(PROD_ENDDATE
-                            ,PROD_WRITER
+                            ,USER_ID
                             ,PROD_NAME
                             ,PROD_PRICE
                             ,PROD_COUNT
@@ -34,7 +34,7 @@
     <select id="getList" resultType="ProductVO">
         SELECT *
         FROM PRODUCT
-        WHERE PROD_WRITER = #{userId}
+        WHERE USER_ID = #{userId}
         /*input 태그는 값이 없으면 공백, 페이지 첫 진입할 때 null로 넘어갈 수 있어서*/
         <if test="cri.searchName != '' and cri.searchName != null">
             AND PROD_NAME LIKE CONCAT('%',#{cri.searchName},'%')
@@ -67,7 +67,7 @@
     <select id="getTotal" resultType="int">
         SELECT COUNT(*) AS TOTAL
         FROM PRODUCT
-        WHERE PROD_WRITER = #{userId}
+        WHERE USER_ID = #{userId}
         <if test="cri.searchName != '' and cri.searchName != null">
             AND PROD_NAME LIKE CONCAT('%',#{cri.searchName},'%')
         </if>
