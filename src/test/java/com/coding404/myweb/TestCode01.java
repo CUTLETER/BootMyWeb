@@ -17,7 +17,7 @@ public class TestCode01 {
 //        for(int i = 1; i <= 50; i++) {
 //            ProductVO vo = ProductVO.builder()
 //                    .prodEnddate("2024-08-15")
-//                    .prodWriter("admin")
+//                    .userId("admin")
 //                    .prodName("coding404" + i)
 //                    .prodPrice(i * 100)
 //                    .prodCount(i * 10)

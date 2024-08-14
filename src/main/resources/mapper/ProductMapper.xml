@@ -6,35 +6,51 @@
 <mapper namespace="com.coding404.myweb.product.ProductMapper">
 
     <insert id="productInsert" parameterType="ProductVO">
-        INSERT INTO PRODUCT(PROD_ENDDATE
-                            ,USER_ID
-                            ,PROD_NAME
-                            ,PROD_PRICE
-                            ,PROD_COUNT
-                            ,PROD_DISCOUNT
-                            ,PROD_PURCHASE_YN
-                            ,PROD_CONTENT
-                            ,PROD_COMMENT
-                            )
-        VALUES (
-            #{prodEnddate}
-            ,#{prodWriter}
-            ,#{prodName}
-            ,#{prodPrice}
-            ,#{prodCount}
-            ,#{prodDiscount}
-            ,#{prodPurchaseYn}
-            ,#{prodContent}
-            ,#{prodComment}
-        )
+        INSERT INTO PRODUCT( PROD_ENDDATE
+                           , PROD_CATEGORY
+                           , USER_ID
+                           , PROD_NAME
+                           , PROD_PRICE
+                           , PROD_COUNT
+                           , PROD_DISCOUNT
+                           , PROD_PURCHASE_YN
+                           , PROD_CONTENT
+                           , PROD_COMMENT)
+        VALUES ( #{prodEnddate}
+               , #{prodCategory}
+               , #{userId}
+               , #{prodName}
+               , #{prodPrice}
+               , #{prodCount}
+               , #{prodDiscount}
+               , #{prodPurchaseYn}
+               , #{prodContent}
+               , #{prodComment})
     </insert>
 
     <!-- 목록을 조회한다 -->
     <!-- 동적 쿼리 test 구문에는 vo의 getter나 map의 key값이 사용 가능함-->
     <select id="getList" resultType="ProductVO">
+        <![CDATA[
         SELECT *
-        FROM PRODUCT
+        FROM PRODUCT P
+        LEFT JOIN (
+            SELECT CONCAT(A1.group_ID, A1.CATEGORY_ID) AS CATEGORY_KEY, ##카테고리 키 (그룹 + 키 형태로 카테고리분류)
+            CASE A1.category_parent_LV
+            WHEN 0 THEN A1.category_detail_NM
+            WHEN 1 THEN CONCAT(A2.category_detail_NM,' > ', A1.category_detail_NM)
+            WHEN 2 THEN CONCAT(A3.category_detail_NM, ' > ', A2.category_detail_NM,' > ', A1.category_detail_NM)
+            END as CATEGORY_NAV
+            FROM PRODUCT_CATEGORY A1
+            LEFT OUTER JOIN PRODUCT_CATEGORY A2
+            ON A1.CATEGORY_PARENT_LV = A2.CATEGORY_LV AND A1.CATEGORY_DETAIL_PARENT_LV = A2.CATEGORY_DETAIL_LV AND A1.GROUP_ID = A2.GROUP_ID
+            LEFT OUTER JOIN PRODUCT_CATEGORY A3
+            ON A2.CATEGORY_PARENT_LV = A3.CATEGORY_LV AND A2.CATEGORY_DETAIL_PARENT_LV = A3.CATEGORY_DETAIL_LV
+            ORDER BY CATEGORY_NAV ASC
+        ) C
+        ON P.PROD_CATEGORY = C.CATEGORY_KEY
         WHERE USER_ID = #{userId}
+        ]]>
         /*input 태그는 값이 없으면 공백, 페이지 첫 진입할 때 null로 넘어갈 수 있어서*/
         <if test="cri.searchName != '' and cri.searchName != null">
             AND PROD_NAME LIKE CONCAT('%',#{cri.searchName},'%')
@@ -46,11 +62,11 @@
             <![CDATA[AND PROD_ENDDATE >= #{cri.startDate}]]>
         </if>
         <if test="cri.endDate != '' and cri.endDate != null">
-          /*
+            /*
             xml 이나 html 한해서는 꺽쇠가 태그를 열고 닫는 인자로 인식됨
             그래서 순수 문자열로 변환시켜줘야 하는데 그럴 때 쓰는 게 CDATA
             <![CDATA[여기 들어간 값은 순수한 문자열로 인식됨]]>
-          */
+            */
             <![CDATA[AND PROD_ENDDATE <= #{cri.endDate}]]>
         </if>
         ORDER BY
@@ -85,29 +101,61 @@
     <!--상세내역을 조회한다-->
     <select id="getDetail" resultType="ProductVO">
         SELECT *
-        FROM PRODUCT
+        FROM PRODUCT P
+        LEFT JOIN (
+            SELECT CONCAT(A1.group_ID, A1.CATEGORY_ID) AS CATEGORY_KEY,
+                CASE A1.category_parent_LV
+                    WHEN 0 THEN A1.category_detail_NM
+                    WHEN 1 THEN CONCAT(A2.category_detail_NM,' > ', A1.category_detail_NM)
+                    WHEN 2 THEN CONCAT(A3.category_detail_NM, ' > ', A2.category_detail_NM,' > ', A1.category_detail_NM)
+            END as CATEGORY_NAV
+            FROM PRODUCT_CATEGORY A1
+            LEFT OUTER JOIN PRODUCT_CATEGORY A2
+            ON A1.CATEGORY_PARENT_LV = A2.CATEGORY_LV AND A1.CATEGORY_DETAIL_PARENT_LV = A2.CATEGORY_DETAIL_LV AND A1.GROUP_ID = A2.GROUP_ID
+            LEFT OUTER JOIN PRODUCT_CATEGORY A3
+            ON A2.CATEGORY_PARENT_LV = A3.CATEGORY_LV AND A2.CATEGORY_DETAIL_PARENT_LV = A3.CATEGORY_DETAIL_LV
+            ORDER BY CATEGORY_NAV ASC
+            ) C
+        ON P.PROD_CATEGORY = C.CATEGORY_KEY
         WHERE PROD_ID = #{prodId}
     </select>
 
 
     <update id="productUpdate" parameterType="ProductVO">
         UPDATE PRODUCT
-        SET
-            PROD_ENDDATE = #{prodEnddate}
-            ,PROD_NAME = #{prodName}
-            ,PROD_PRICE = #{prodPrice}
-            ,PROD_COUNT = #{prodCount}
-            ,PROD_DISCOUNT = #{prodDiscount}
-            ,PROD_PURCHASE_YN = #{prodPurchaseYn}
-            ,PROD_CONTENT = #{prodContent}
-            ,PROD_COMMENT = #{prodComment}
+        SET PROD_ENDDATE     = #{prodEnddate}
+          , PROD_NAME        = #{prodName}
+          , PROD_PRICE       = #{prodPrice}
+          , PROD_COUNT       = #{prodCount}
+          , PROD_DISCOUNT    = #{prodDiscount}
+          , PROD_PURCHASE_YN = #{prodPurchaseYn}
+          , PROD_CONTENT     = #{prodContent}
+          , PROD_COMMENT     = #{prodComment}
         WHERE PROD_ID = #{prodId}
     </update>
 
     <!--삭제 기능 -->
     <delete id="productDelete" parameterType="int">
-        DELETE FROM PRODUCT WHERE PROD_ID = #{prodId}
+        DELETE
+        FROM PRODUCT
+        WHERE PROD_ID = #{prodId}
     </delete>
 
+
+    <!-- 카테고리 1단계 조회 -->
+    <select id="getCategory" resultType="CategoryVO">
+        SELECT *
+        FROM PRODUCT_CATEGORY WHERE CATEGORY_LV = 1
+    </select>
+
+    <!-- 카테고리 2,3단계 조회 -->
+    <!-- PARENT_LV = 상위 카테고리 LV -->
+    <select id="getCategoryChild" resultType="CategoryVO">
+        SELECT *
+        FROM PRODUCT_CATEGORY
+        WHERE GROUP_ID = #{groupId}
+          AND CATEGORY_PARENT_LV = #{categoryLv}
+          AND CATEGORY_DETAIL_PARENT_LV = #{categoryDetailLv}
+    </select>
 
 </mapper>

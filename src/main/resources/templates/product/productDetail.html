@@ -34,12 +34,12 @@
 
                                                         <td colspan="5">
                                                             <div>수정이 불가능한 옵션입니다(상품관리자에게 문의하세요)</div>
-                                                            대분류 > 중분류 > 소분류
+                                                            [[${vo.categoryNav}]]
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th>등록자ID</th>
-                                                        <td><input type="text" name="prodWriter" th:value="${vo.prodWriter}" readonly /></td>
+                                                        <td><input type="text" name="userId" th:value="${vo.userId}" readonly /></td>
                                                     </tr>
                                                     <tr>
                                                         <th scope="row">제목(상품명)</th>

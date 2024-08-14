@@ -17,7 +17,7 @@ public class ProductVO {
     private LocalDateTime prodRegdate;
     private String prodEnddate;
     private String prodCategory;
-    private String prodWriter;
+    private String userId;
     private String prodName;
     private Integer prodPrice;
     private Integer prodCount;
@@ -25,4 +25,7 @@ public class ProductVO {
     private String prodPurchaseYn;
     private String prodContent;
     private String prodComment;
+
+    // N대1 관계 조인 - 1 테이블의 컬럼을 추가함
+    private String categoryNav;
 }

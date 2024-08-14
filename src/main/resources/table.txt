@@ -61,3 +61,85 @@ CREATE TABLE TOPIC (
     TOPIC_REGDATE TIMESTAMP DEFAULT NOW()
 );
 
+#########################################################
+CREATE TABLE PRODUCT_CATEGORY(
+    CATEGORY_ID INT PRIMARY KEY AUTO_INCREMENT, ##카테고리 PK
+    GROUP_ID VARCHAR(10),			##카테고리 대분류 그룹
+    CATEGORY_LV INT, 				  ##1,2,3단
+    CATEGORY_NM VARCHAR(100), 		##대분류 중분류 소분류
+    CATEGORY_DETAIL_LV INT, 			##분류별 순서
+    CATEGORY_DETAIL_NM VARCHAR(100), 		##이름
+    CATEGORY_PARENT_LV INT , 			  ##1,2,3에 대한 부모컬럼
+    CATEGORY_DETAIL_PARENT_LV INT		##분류별 순서에 대한 부모컬럼
+);
+
+#########################################################
+# 예시
+CREATE TABLE EX_MEMO(
+	 MNO INT PRIMARY KEY AUTO_INCREMENT,
+	 WRITER VARCHAR(50) NOT NULL,
+	 MEMO VARCHAR(200) NOT NULL
+ );
+insert into EX_MEMO(writer, memo) values('aaa', 'aaa');
+insert into EX_MEMO(writer, memo) values('aaa', 'bbb');
+insert into EX_MEMO(writer, memo) values('aaa', 'ccc');
+
+ CREATE TABLE EX_USERS(
+	 ID VARCHAR(50) PRIMARY KEY,
+	 PW VARCHAR(50) NOT NULL,
+	 NAME VARCHAR(50)
+ );
+ insert into EX_USERS(ID, pw, name) values('aaa', '1234', '홍길동');
+
+ SELECT * FROM EX_MEMO;
+ SELECT * FROM EX_USERS;
+
+# N:1 관계
+SELECT * FROM EX_MEMO M
+LEFT JOIN EX_USERS U
+ON M.WRITER = U.ID;
+
+# 1:N 관계
+SELECT * FROM EX_USERS U
+LEFT JOIN EX_MEMO M
+ON U.ID = M.WRITER WHERE U.ID = 'aaa';
+
+###################################################################
+
+SELECT * FROM PRODUCT;
+SELECT * FROM PRODUCT WHERE PROD_NAME LIKE '%10%';
+SELECT * FROM PRODUCT WHERE PROD_NAME LIKE CONCAT ('%', '10' ,'%');
+
+SELECT * FROM PRODUCT WHERE USER_ID = 'admin' AND PROD_NAME LIKE CONCAT ('%','10','%')
+# AND PROD_CONTENT LIKE '%10%'
+AND PROD_ENDDATE >= '2024-10-15'
+AND PROD_ENDDATE <= '2024-10-15'
+ORDER BY PROD_PRICE ASC, PROD_ID DESC
+LIMIT 0, 10;
+
+DELETE FROM PRODUCT WHERE PROD_ID IN (SELECT PROD_ID FROM PRODUCT WHERE USER_ID = 'admin');
+
+ALTER TABLE PRODUCT CHANGE USER_ID USER_ID VARCHAR(20);
+
+
+# 글 번호, 아이디, 제목, 내용, 등록일
+CREATE TABLE TOPIC (
+	TOPIC_ID INT PRIMARY KEY AUTO_INCREMENT,
+    USER_ID VARCHAR(20),
+    TOPIC_TITLE VARCHAR(500) NOT NULL,
+    TOPIC_CONTENT VARCHAR(5000) NOT NULL,
+    TOPIC_REGDATE TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE PRODUCT_CATEGORY(
+    CATEGORY_ID INT PRIMARY KEY AUTO_INCREMENT, ##카테고리 PK
+    GROUP_ID VARCHAR(10),			##카테고리 대분류 그룹
+    CATEGORY_LV INT, 				  ##1,2,3단
+    CATEGORY_NM VARCHAR(100), 		##대분류 중분류 소분류
+    CATEGORY_DETAIL_LV INT, 			##분류별 순서
+    CATEGORY_DETAIL_NM VARCHAR(100), 		##이름
+    CATEGORY_PARENT_LV INT , 			  ##1,2,3에 대한 부모컬럼
+    CATEGORY_DETAIL_PARENT_LV INT		##분류별 순서에 대한 부모컬럼
+);
+
+SELECT * FROM PRODUCT_CATEGORY;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coding404.myweb.TestMapper">
+
+    <select id="joinOne" resultType="MemoVO">
+        SELECT * FROM EX_MEMO M LEFT JOIN EX_USERS U ON M.WRITER = U.ID
+    </select>
+
+    <!--
+    1대N 관계 조인에서는 조인의 ORM 작업을 직접 표기하며 반환 타입을 resultMap으로 받음
+    resultMap의  id는 식별자를 의미함
+    resultMap의 type은 반환 타입을 의미함
+    result 태그에 값을 담아줌
+    result의 column은 데이터베이스의 컬럼명을 의미함
+    result의 property는 vo의 속성명을 의미함
+    -->
+    <select id="joinTwo" resultMap="myResult">
+        SELECT * FROM EX_USERS U LEFT JOIN EX_MEMO M ON U.ID = M.WRITER
+    </select>
+
+    <resultMap id="myResult" type="UsersVO">
+        <!--id 컬럼의 값을 UsersVO id에 담겠다는 뜻-->
+        <result column="id" property="id"></result>
+        <!--pw 컬럼의 값을 UsersVO pw에 담겠다는 뜻-->
+        <result column="pw" property="pw"></result>
+        <!--name 컬럼의 값을 UsersVO name에 담겠다는 뜻-->
+        <result column="name" property="name"></result>
+        <collection property="memoList" resultMap="myList"></collection>
+    </resultMap>
+    <resultMap id="myList" type="MemoVO">
+        <!--UsersVO의 memoList에 값을 저장시킴-->
+        <!--mno 컬럼의 값을 MemoVO mno에 담겠다는 뜻-->
+        <result column="mno" property="mno"></result>
+        <result column="writer" property="writer"></result>
+        <result column="memo" property="memo"></result>
+    </resultMap>
+
+</mapper>
