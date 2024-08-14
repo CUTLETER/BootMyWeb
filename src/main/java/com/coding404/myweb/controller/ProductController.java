@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/product")
@@ -87,11 +90,24 @@ public class ProductController {
     //등록요청
     @PostMapping("/registForm")
     public String registForm(ProductVO vo,
+                             @RequestParam("file") List<MultipartFile> files, // 파일 업로드
                              RedirectAttributes ra ) {
 
-        //서버측에서 유효성 검사 진행가능
+        // 파일이 빈 껍데기로 넘어오는 것을 방지
+        files = files.stream().filter(file -> file.isEmpty() == false).collect(Collectors.toList());
 
-        int result = productService.productInsert(vo);
+        // 확장자 검사
+        for (MultipartFile f : files) {
+            String contentType = f.getContentType();
+            System.out.println(contentType);
+            if(contentType.contains("image") == false) {
+                ra.addFlashAttribute("msg", "png, jpg, jpeg 형식만 등록 가능합니다.");
+                return "redirect:/product/productList";
+            }
+        }
+
+        //서버측에서 유효성 검사 진행가능
+        int result = productService.productInsert(vo, files);
 
         if(result == 1) {
             ra.addFlashAttribute("msg", "정상 등록되었습니다");

@@ -158,4 +158,34 @@
           AND CATEGORY_DETAIL_PARENT_LV = #{categoryDetailLv}
     </select>
 
+    <!--파일 insert (상품 등록과 함께 등록됨)-->
+    <insert id="uploadFile" parameterType="ProductUploadVO">
+        /*
+        파일 insert 전에 product 테이블의 prod_id 값을 조회한 뒤 가지고 와서 fk로 저장시켜야 함
+        selectKey 태그는 특정 테이블을 조회해서, 조회한 결과를 vo에 대신 담아줌
+        insert 태그 안에 종속시킴, 결과값을 ProductUploadVO에 맵핑시킴
+
+        order 속성은 sql문 실행 이전, 실행 이후를 결정하는 속성
+        resultType 속성은 실행될 sql문의 반환 타입
+        keyProperty 속성은 조회한 결과를 vo의 어느 컬럼에 저장할지 정하는 속성
+        */
+        <selectKey order="BEFORE" resultType="int" keyProperty="prodId">/*insert 넣기 전으로 조회해야 하므로 before*/
+            SELECT MAX(PROD_ID) FROM PRODUCT WHERE USER_ID = #{userId}
+        </selectKey>
+
+        INSERT INTO PRODUCT_UPLOAD (
+                                    FILE_NAME,
+                                    FILE_PATH,
+                                    UUID,
+                                    PROD_ID,
+                                    USER_ID
+        )
+        VALUES (
+                #{fileName},
+                #{filePath},
+                #{uuid},
+                #{prodId},
+                #{userId}
+               )
+    </insert>
 </mapper>

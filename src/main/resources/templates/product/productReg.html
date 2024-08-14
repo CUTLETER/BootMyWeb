@@ -8,7 +8,7 @@
                 <div class="midiaq">
                     <div class="page_title">상품 관리 > 상품 등록</div>
 
-                    <form name="productForm" action="registForm" method="post">
+                    <form name="productForm" action="registForm" method="post" enctype="multipart/form-data">
                         <div class="full_collum collum">
                             <ul>
                                 <li class="collum_tit">
@@ -152,7 +152,7 @@
                                                             </div>
                                                             <div class="left">
                                                                 <span>추가이미지</span>
-                                                                <label class="upload-display" for="b_file">
+                                                                <label class="upload-display" for="b_file"> <!--바로 밑에 input 태그의 id명 (b_file)과 동일하게 적을 것-->
                                                                 <span class="upload-thumb-wrap">
                                                                     <img class="upload-thumb" src="../img/plus_btn.png">
                                                                 </span>

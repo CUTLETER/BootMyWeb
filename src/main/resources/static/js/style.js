@@ -27,11 +27,11 @@ $(document).ready(function() {
 	var fileTarget = $('.filebox .upload-hidden'); //jquery는 다중 태그이벤트도 한번에 처리
 	fileTarget.on('change', function(){ //change이벤트
 		if(window.FileReader){ // modern browser
-			var filename = $(this)[0].files[0].name; }
+			var fileName = $(this)[0].files[0].name; }
 		else { // old IE
-			var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출
+			var fileName = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출
 		} // 추출한 파일명 삽입
-		$(this).siblings('.upload-name').val(filename); });
+		$(this).siblings('.upload-name').val(fileName); });
 
 	var imgTarget = $('.preview-image .upload-hidden');
 	imgTarget.on('change', function() {

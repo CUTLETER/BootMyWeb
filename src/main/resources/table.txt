@@ -143,3 +143,15 @@ CREATE TABLE PRODUCT_CATEGORY(
 );
 
 SELECT * FROM PRODUCT_CATEGORY;
+
+
+#############################################################
+CREATE TABLE PRODUCT_UPLOAD (
+	UPLOAD_NO INT PRIMARY KEY auto_increment,
+  FILE_NAME varchar(100) not null, ##실제파일명
+  FILE_PATH varchar(100) not null, ##폴더명
+	UUID varchar(50) not null, ##UUID명
+  REGDATE TIMESTAMP default now(),
+	PROD_ID INT, ##FK
+	USER_ID VARCHAR(20) ##FK
+);
