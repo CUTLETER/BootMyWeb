@@ -103,7 +103,7 @@
 
                                                 <tr>
                                                     <th>등록자ID</th>
-                                                    <td><input type="text" class="inputw150" name="userId" value="" required></td>
+                                                    <td><input type="text" class="inputw150" name="userId" th:value="${session.userVO.id}" required readonly></td>
                                                     <!--
                                                     <th>등록자이름</th>
                                                     <td colspan="3"><input type="text" class="inputw150" name="_name"  value=""></td>

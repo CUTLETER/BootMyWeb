@@ -2,6 +2,7 @@ package com.coding404.myweb.controller;
 
 import com.coding404.myweb.command.ProductUploadVO;
 import com.coding404.myweb.command.ProductVO;
+import com.coding404.myweb.command.UserVO;
 import com.coding404.myweb.product.ProductService;
 import com.coding404.myweb.util.Criteria;
 import com.coding404.myweb.util.PageVO;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,10 +57,12 @@ public class ProductController {
     // 페이지네이션을 누를 때 검색 키워드를 같이 넘겨주기
     // 100개씩 보기 버튼 추가
     @GetMapping("/productList")
-    public String productList(Model model, Criteria cri) {
+    public String productList(Model model, Criteria cri, HttpSession session) {
 
         //현재 로그인되어 있는 사람 아이디가 admin이라고 가정하고
-        String userId = "admin";
+        // String userId = "admin";
+        UserVO vo = (UserVO) session.getAttribute("userVO");
+        String userId = vo.getId(); // 현재 로그인 한 사람의 아이디
 
         ArrayList<ProductVO> list = productService.getList(userId, cri);
         model.addAttribute("list", list);

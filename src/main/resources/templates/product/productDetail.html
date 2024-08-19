@@ -62,7 +62,7 @@
                                                                 <div class="productImg">
 
                                                                     <div class="imgItem" th:each="vo : ${img}">
-                                                                        <span class="imgKind">대표이미지</span>
+                                                                        <span class="imgKind"><a th:href="@{/download/{filePath}/{uuid}/{fileName}(filePath=${vo.filePath}, uuid=${vo.uuid}, fileName=${vo.fileName})}" download>대표이미지(다운로드)</a></span>
                                                                         <div class="imgWrap">
                                                                             <div class="imgArea">
                                                                                 <!--값 참조할 땐 ${}, href나 src 등은 @{}, replace 등은 ~{}-->

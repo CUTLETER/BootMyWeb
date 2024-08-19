@@ -9,9 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,9 +76,6 @@ public class AjaxController {
     public ResponseEntity<byte[]> display(@PathVariable("filePath") String filePath,
                           @PathVariable("uuid") String uuid,
                           @PathVariable("fileName") String fileName) {
-        System.out.println(filePath);
-        System.out.println(uuid);
-        System.out.println(fileName);
 
         // 하드 디스크에 있는 파일 경로
         ResponseEntity<byte[]> result = null;
@@ -99,5 +94,30 @@ public class AjaxController {
 
         return result; // 요청이 들어온 곳으로 응답함
     }
+
+    // 파일 다운로드
+    @GetMapping("/download/{filePath}/{uuid}/{fileName}")
+    @ResponseBody
+    public ResponseEntity<byte[]> download(@PathVariable("filePath") String filePath,
+                                          @PathVariable("uuid") String uuid,
+                                          @PathVariable("fileName") String fileName) {
+        // 하드 디스크에 있는 파일 경로
+        ResponseEntity<byte[]> result = null;
+        String path = uploadPath + "/" + filePath + "/" + uuid + "_" + fileName; // 파일의 실제 경로
+        File file = new File(uploadPath);
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition","attachment; fileName=" + fileName); // 해당 경로에 있는 파일의 MIME 타입을 구해옴
+
+            byte[] copy = FileCopyUtils.copyToByteArray(file); // 파일 데이터의 byte 배열 값을 구해서 반환시킴
+            result = new ResponseEntity<>(copy, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result; // 요청이 들어온 곳으로 응답함
+    }
+
 
 }
