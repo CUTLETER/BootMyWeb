@@ -28,4 +28,6 @@ public interface ProductMapper { // 매개변수가 2개 이상이면 Param 처�
     // 파일 데이터 insert
     public void uploadFile(ProductUploadVO vo);
 
+    // 파일 데이터 조회
+    public ArrayList<ProductUploadVO> getImg(int prodId);
 }

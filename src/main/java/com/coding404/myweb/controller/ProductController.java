@@ -1,5 +1,6 @@
 package com.coding404.myweb.controller;
 
+import com.coding404.myweb.command.ProductUploadVO;
 import com.coding404.myweb.command.ProductVO;
 import com.coding404.myweb.product.ProductService;
 import com.coding404.myweb.util.Criteria;
@@ -80,9 +81,13 @@ public class ProductController {
     @GetMapping("/productDetail")
     public String productDetail(@RequestParam("prodId") int prodId,
                                 Model model) {
-
+        // 상품에 대한 Select
         ProductVO vo = productService.getDetail(prodId);
         model.addAttribute("vo", vo);
+
+        // 파일에 대한 Select (원래라면 mapper.xml 가서 join 한번 더 시켜야 함)
+        ArrayList<ProductUploadVO> img = productService.getImg(prodId);
+        model.addAttribute("img", img);
 
         return "product/productDetail";
     }
